@@ -1,0 +1,19 @@
+\begin{table}
+    \centering
+    \caption[short]{Cross Validation and AIC Result}
+    \label{tab:cv-result}
+    \begin{tabular}{c|ccc}
+        \hline\hline
+        Model & AIC & CV & Accuracy\\ \hline\hline
+        Reduced Rank LDA &  & 0.9541 & 0.0560 \\
+        PCA + LDA & 0.9649 & 0.9548 & 0.9447 \\
+        PCA + SVM-1 & 0.7858 & 0.7790 & 0.7647 \\
+        PCA + SVM-2 & 0.0489 & 0.0489 & 0.0378 \\
+        PCA + SVM-3 & 0.0489 & 0.0489 & 0.0378 \\
+        PCA + MLP-100 & 1.0 & 0.9532 & 0.9251 \\
+        PCA + MLP-200 & 1.0 & 0.9551 & 0.9286 \\
+        PCA + MLP-300 & 1.0 & 0.9535 & 0.9321 \\
+        PCA + MLP-400 & 1.0 & 0.9577 & 0.9349 \\
+        \hline\hline
+    \end{tabular}
+\end{table}

@@ -1,0 +1,56 @@
+\section{Support Vector Machine (SVM)}
+\label{sec:svm}
+
+The second classification model I try is the support vector machine (SVM).
+SVM uses a linear surface to distinguish between two classes.
+The aim of SVM is to maximize the distance between the linear surface and support vectors.
+However, the problem is an ill-posed problem.
+Therefore, instead of solving the original problem, I try to solve the dual problem.
+
+The first step is to solve a quadratic programming (QP) problem:
+\begin{eqnarray}
+    \max_\alpha & \mathcal{L} = -\dfrac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\alpha_i\alpha_jy_iy_jK\left(x_i, x_j\right) + \sum_{i=1}^{n}\alpha_i \\
+    s.t. & \alpha_i \geqslant 0 \\
+     & \sum_{i=1}^{n} \alpha_iy_i = 0
+    \label{eqn:svm-qp}
+\end{eqnarray}
+
+We solve the QP problem with Python library \textit{cvxopt}.
+We use the function \textit{cvxopt.solvers.qp(P,q,G,h,A,b)} to solve the QP problem:
+\begin{eqnarray}
+    \min & \dfrac{1}{2} x^TPx + q^T x \\
+    s.t. & Gx \leqslant h \\
+     & Ax = b
+\end{eqnarray}
+Therefore, the parameters are:
+\begin{eqnarray}
+    P & = & y y^T .* K(x,x) \\
+    q & = & -1 \\
+    G & = & - \mathcal{I} \\
+    h & = & 0 \\
+    A & = & y \\ 
+    b & = & 0
+\end{eqnarray}
+
+
+Then we select the samples with $\alpha>0$ as support vector $x_{t_j}$.
+However, none of the $\alpha$ in the solution is strictly 0 due to the computational error.
+To address this, we manully set a threshold $\alpha_{tr}=1e-6$, and reguard $\alpha_i<\alpha_{tr}$ as 0.
+Then a new sample $z$ can be classified with:
+\begin{eqnarray}
+    \hat{y} & = & \mathrm{sgn}\left(\alpha_t\cdot y_t\cdot \left(x_t^Tz\right)\right)
+    \label{eqn:svm-pred}
+\end{eqnarray}
+
+For every two classes, we train an SVM model to classify them.
+As there are 20 classes, we train 190 SVM models.
+Given a test sample, each SVM model votes on it.
+The class with the most votes is regarded as the result of the classification.
+
+The kernel function $K\left(x_i, x_j\right)$ is decided using model selection.
+We consider the polynomial kernel function:
+\begin{eqnarray}
+    K\left(x_i, x\right) & = & \left(x_i^T\cdot x +1\right)^p
+    \label{eqn:svm-kernel}
+\end{eqnarray}
+In model selection, we test the order $p=1,2,3$ and select the best value of the order.

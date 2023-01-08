@@ -1,0 +1,21 @@
+\section{Linear Discriminant Analysis (LDA)}
+\label{sec:lda}
+
+The first classification model I try is Linear Discriminant Analysis (LDA).
+This means that we introduce an assumption that the distribution is the same among different classes.
+A linear line is used to distinguish between the classes.
+The LDA Rule is:
+\begin{eqnarray}
+    \delta_k\left(x\right) & = & x^T\Sigma^{-1}\mu_k - \dfrac{1}{2}\mu_k\Sigma^-1\mu_k+\log\pi_k
+    \label{eqn:lda-rule}
+\end{eqnarray}
+where $\mu_k$ is the mean of the $k^{\mathrm{th}}$ class, $\pi_k$ is the proportion of class $k$, $\Sigma$ is the variance of the samples.
+For each category $k=1,...,20$, we compute the score $\delta_k(x)$.
+The class of the sample is the category with the maximum $delta_k(x)$ value.
+
+The parameters are estimated by:
+\begin{eqnarray}
+    \hat{\pi}_k & = & \dfrac{N_k}{N} \\
+    \hat{\mu}_k & = & \sum_{g_i=k}x_i\/N_k \\
+    \hat{\Sigma} & = & \sum_{k=1}^{K}\sum_{g_i=k} \left(x_i-\hat{\mu}_k\right)\left(x_i-\hat{\mu}_k\right)^T / \left(N-K\right)
+\end{eqnarray}
